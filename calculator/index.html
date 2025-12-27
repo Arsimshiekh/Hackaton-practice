@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <title>Professional Resume Generator</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    <!-- PDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+    <h1></h1>
+    
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <div class="brand">
+                <div class="logo-icon"><i class="fa-solid fa-file-contract"></i></div>
+                <span>Resume-Generator</span>
+            </div>
+            
+            <nav class="nav-menu">
+               
+            </nav>
+            <div class="nav-actions">
+                <!-- Logged Out State -->
+                <div class="auth-buttons" id="auth-buttons-out">
+                    <button class="btn btn-ghost" onclick="app.showAuth('login')">Login</button>
+                    <button class="btn btn-primary" onclick="app.showAuth('signup')">Sign Up</button>
+                </div>
+                <!-- Logged In State -->
+                <div class="user-menu hidden" id="user-menu">
+                    <span class="user-name" id="display-user">John Doe</span>
+                    <button class="btn btn-sm btn-outline-danger" onclick="app.logout()"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+                <button class="mobile-toggle"><i class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
+    </header>
+    <main id="app-container">
+        
+        <!-- 1. LANDING PAGE VIEW -->
+        <section id="view-home" class="view active">
+            <div class="hero">
+                <div class="hero-bg"></div>
+                <div class="container hero-content">
+                    <h1>Create Your <span class="gradient-text">Professional Resume</span> in Minutes</h1>
+                    <p class="hero-sub">Modern, Attractive & Professional resume builder with suggestions to help you land your dream job.</p>
+                    <div class="cta-group">
+                        <button class="btn btn-lg btn-primary" onclick="app.handleStart()">Get Started <i class="fa-solid fa-arrow-right"></i></button>
+                        <button class="btn btn-lg btn-outline" onclick="window.location.href='#templates'">View Templates</button>
+                    </div>
+                    <div class="hero-features">
+                        <div class="feature-badge"><i class="fa-solid fa-bolt"></i> Fast</div>
+                        <div class="feature-badge"><i class="fa-solid fa-file-pdf"></i> PDF Export</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 2. AUTH VIEW -->
+        <section id="view-auth" class="view hidden">
+            <div class="auth-container">
+                <div class="auth-card glass-panel">
+                    
+                    <!-- Login Form -->
+                    <form id="form-login" class="auth-form active">
+                        <h2>Welcome Back</h2>
+                        <p class="text-secondary">Please enter your details</p>
+                        
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" placeholder="••••••••" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                        
+                        <p class="auth-switch">
+                            Don't have an account? <a href="#" onclick="app.toggleAuthMode('signup')">Sign up</a>
+                        </p>
+                    </form>
+                    <!-- Signup Form -->
+                    <form id="form-signup" class="auth-form hidden">
+                        <h2>Create Account</h2>
+                        <p class="text-secondary">Start building your resume</p>
+                        
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" name="name" placeholder="John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" placeholder="Create a password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+                        
+                        <p class="auth-switch">
+                            Already have an account? <a href="#" onclick="app.toggleAuthMode('login')">Log in</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <!-- 3. RESUME BUILDER VIEW -->
+        <section id="view-builder" class="view hidden">
+            <div class="builder-container">
+                
+                <!-- Left Panel: Editor -->
+                <div class="builder-editor glass-panel">
+                    <div class="editor-header">
+                        <h2><i class="fa-solid fa-pen-to-square"></i> Editor</h2>
+                        <button class="btn btn-sm btn-outline-danger" onclick="app.resetForm()">Reset</button>
+                    </div>
+                    <div class="editor-scroll">
+                        <!-- Personal Info -->
+                        <div class="form-section">
+                            <h3>Personal Details</h3>
+                            <div class="grid-2">
+                                <div class="form-group">
+                                    <label>Full Name</label>
+                                    <input type="text" data-model="personal.name" placeholder="Rajesh Kumar">
+                                </div>
+                                <div class="form-group">
+                                    <label>Job Title</label>
+                                    <input type="text" data-model="personal.title" placeholder="Full Stack Developer">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" data-model="personal.email" placeholder="rajesh@example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <input type="text" data-model="personal.phone" placeholder="+92 300 1234567">
+                                </div>
+                                <div class="form-group full">
+                                    <label>Location</label>
+                                    <input type="text" data-model="personal.location" placeholder="Karachi, Pakistan">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Summary -->
+                        <div class="form-section">
+                            <h3>Professional Summary</h3>
+                            <textarea data-model="summary" rows="4" placeholder="Experienced developer with..."></textarea>
+                        </div>
+                        <!-- Skills -->
+                        <div class="form-section">
+                            <h3>Skills</h3>
+                            <div class="input-with-action">
+                                <input type="text" id="skill-input" placeholder="Add a skill (e.g. React)">
+                                <button class="btn btn-primary" onclick="app.addSkill()"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                            <div id="skills-tags" class="tags-container">
+                                <!-- Tags will serve here -->
+                            </div>
+                        </div>
+                        <!-- Education -->
+                        <div class="form-section">
+                            <div class="section-head">
+                                <h3>Education</h3>
+                                <button class="btn btn-sm btn-outline" onclick="app.addEducation()"><i class="fa-solid fa-plus"></i> Add</button>
+                            </div>
+                            <div id="education-list" class="dynamic-list"></div>
+                        </div>
+                        <!-- Experience -->
+                        <div class="form-section">
+                            <div class="section-head">
+                                <h3>Experience</h3>
+                                <button class="btn btn-sm btn-outline" onclick="app.addExperience()"><i class="fa-solid fa-plus"></i> Add</button>
+                            </div>
+                            <div id="experience-list" class="dynamic-list"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Right Panel: Preview -->
+                <div class="builder-preview">
+                    <div class="preview-actions">
+                        <button class="btn btn-secondary" onclick="app.generatePDF()"><i class="fa-solid fa-download"></i> Download PDF</button>
+                    </div>
+                    
+                    <div class="resume-paper" id="resume-preview">
+                        <!-- Resume Content -->
+                        <div class="resume-header">
+                            <h1 id="prev-name">Rajesh Kumar</h1>
+                            <p class="prev-title" id="prev-title">Full Stack Developer</p>
+                            <div class="prev-contact">
+                                <span id="prev-email"><i class="fa-solid fa-envelope"></i> email@example.com</span>
+                                <span id="prev-phone"><i class="fa-solid fa-phone"></i> +92 300 ...</span>
+                                <span id="prev-location"><i class="fa-solid fa-location-dot"></i> Karachi</span>
+                            </div>
+                        </div>
+                        <div class="resume-body">
+                            <div class="prev-section">
+                                <h4>Summary</h4>
+                                <hr>
+                                <p id="prev-summary">Professional summary goes here...</p>
+                            </div>
+                            <div class="prev-section">
+                                <h4>Skills</h4>
+                                <hr>
+                                <div id="prev-skills" class="prev-tags"></div>
+                            </div>
+                            <div class="prev-section">
+                                <h4>Experience</h4>
+                                <hr>
+                                <div id="prev-experience"></div>
+                            </div>
+                            <div class="prev-section">
+                                <h4>Education</h4>
+                                <hr>
+                                <div id="prev-education"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-grid">
+            <div class="f-col">
+                <div class="brand">
+                    <span>Made By Arsim Ali</span>
+                    <span>[Arsim Resume]</span>
+                </div>
+                <p>Building careers with modern, professional resumes.</p>
+            </div>
+            <div class="f-col">
+                <h4>Product</h4>
+                <a href="#">Templates</a>
+                <a href="#">Features</a>
+                <a href="#">Pricing</a>
+            </div>
+            <div class="f-col">
+                <h4>Legal</h4>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 ARSIM. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="app.js"></script>
+</body>
+</html>
